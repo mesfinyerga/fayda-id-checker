@@ -45,10 +45,10 @@ jobs:
 
       - name: 📦 Install dependencies (Frontend)
         run: |
-          cd frontend
+          cd fayda_frontend
           npm install
 
       - name: 🛠️ Build React App
         run: |
-          cd frontend
+          cd fayda_frontend
           npm run build
