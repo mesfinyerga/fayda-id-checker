@@ -22,12 +22,12 @@ jobs:
 
       - name: 📦 Install dependencies (Backend)
         run: |
-          cd backend
+          cd fayda_backend
           pip install -r requirements.txt
 
       - name: 🔍 Lint Python code
         run: |
-          cd backend
+          cd fayda_backend
           python -m flake8 . || true
 
   frontend-check:
