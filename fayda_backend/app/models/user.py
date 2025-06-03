@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.base_class import Base
 import datetime
@@ -6,6 +6,7 @@ import datetime
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
+    organization_id = Column(Integer, ForeignKey("organizations.id"), nullable=True)
     full_name = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
@@ -21,3 +22,4 @@ class User(Base):
     avatar_url = Column(String(255), nullable=True)
     bio = Column(Text, nullable=True)
     payments = relationship("Payment", back_populates="user")
+    organization = relationship("Organization", back_populates="users")
