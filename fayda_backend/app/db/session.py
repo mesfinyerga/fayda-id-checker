@@ -1,8 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# You can change this to SQLite or PostgreSQL URL as needed
-SQLALCHEMY_DATABASE_URL = "sqlite:///./fayda.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./fapp.db"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
@@ -16,3 +15,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
+# Run as a Module from the Project Root
+# From your project root (C:\Users\lijma\Documents\GitHub\fayda-id-checker\fayda_backend), run:
+#python -m app.db.init_db

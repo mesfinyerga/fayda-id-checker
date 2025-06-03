@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Container,
   Typography,
@@ -9,31 +9,33 @@ import {
   Avatar,
   List,
   ListItem,
-  ListItemText
-} from '@mui/material';
-import { useAuth } from '../context/AuthContext';
-import IDCheckForm from '../components/IDCheckForm';
+  ListItemText,
+} from "@mui/material";
+import { useAuth } from "../context/AuthContext";
+import IDCheckForm from "../components/IDCheckForm";
+import PaymentHistory from "../components/PaymentHistory";
 
 const UserDashboard = () => {
-  const { role } = useAuth();
+  const { role, token } = useAuth();
 
   return (
     <Container sx={{ mt: 4, mb: 6 }}>
       {/* Profile Header */}
-      <Paper elevation={4} sx={{ p: 4, borderRadius: 3, mb: 4, backgroundColor: '#e3f2fd' }}>
+      <Paper elevation={4} sx={{ p: 4, borderRadius: 3, mb: 4, background: "linear-gradient(90deg, #e3f2fd, #bbdefb)" }}>
         <Grid container alignItems="center" spacing={2}>
-          <Grid item>
-            <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56 }}>👤</Avatar>
-          </Grid>
-          <Grid item xs>
-            <Typography variant="h5" fontWeight="bold">
-              Welcome to Your Dashboard
-            </Typography>
-            <Typography color="text.secondary">
-              You are logged in as <strong>{role}</strong>
-            </Typography>
-          </Grid>
+        <Grid>
+          <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56 }}>👤</Avatar>
         </Grid>
+        <Grid sx={{ flex: 1 }}>
+          <Typography variant="h5" fontWeight="bold">
+            Welcome to Your Dashboard
+          </Typography>
+          <Typography color="text.secondary">
+            You are logged in as <strong>{role}</strong>
+          </Typography>
+        </Grid>
+       </Grid>
+
       </Paper>
 
       {/* Instruction Section */}
@@ -58,13 +60,16 @@ const UserDashboard = () => {
       </Paper>
 
       {/* ID Check Form Section */}
-      <Paper elevation={3} sx={{ p: 4 }}>
+      <Paper elevation={3} sx={{ p: 4, mb: 4 }}>
         <Typography variant="h5" gutterBottom>
           🔍 Fayda ID Verification
         </Typography>
         <Divider sx={{ my: 2 }} />
         <IDCheckForm />
       </Paper>
+
+      {/* Payment History Section */}
+      <PaymentHistory token={token} />
     </Container>
   );
 };

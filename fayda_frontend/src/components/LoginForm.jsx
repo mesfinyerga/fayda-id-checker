@@ -1,46 +1,60 @@
 import React, { useState } from 'react';
 import {
-  Container,
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  Alert,
-  Box
+  Container, TextField, Button, Typography, Paper, Alert, Box, CircularProgress
 } from '@mui/material';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
+
+// Helper: Parse JWT and extract payload
+function parseJwt(token) {
+  if (!token) return {};
+  try {
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch {
+    return {};
+  }
+}
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
+    setLoading(true);
 
     try {
+      // Form data as x-www-form-urlencoded
       const formData = new URLSearchParams();
       formData.append('username', email);
       formData.append('password', password);
 
-      const response = await axios.post('http://localhost:8000/auth/login', formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
+      const res = await axios.post('http://localhost:8000/auth/login', formData, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
 
-      const { access_token } = response.data;
-      const decoded = JSON.parse(atob(access_token.split('.')[1])); // JWT middle payload
-      login(access_token, decoded.role);
+      const { access_token } = res.data;
+      const decoded = parseJwt(access_token);
+      // Save token & role (from JWT or fallback to 'user')
+      login(access_token, decoded.role || 'user');
 
-      navigate(decoded.role === 'admin' ? '/dashboard' : '/user');
+      // Redirect by role
+      if (decoded.role === 'admin') {
+        navigate('/dashboard');
+      } else {
+        navigate('/user');
+      }
     } catch (err) {
-      setErrorMsg('❌ Login failed. Please check credentials.');
+      setErrorMsg('❌ Login failed. Please check your credentials.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +65,7 @@ const LoginForm = () => {
 
         {errorMsg && <Alert severity="error" sx={{ mb: 2 }}>{errorMsg}</Alert>}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} autoComplete="off">
           <TextField
             label="Email"
             type="email"
@@ -71,9 +85,13 @@ const LoginForm = () => {
             sx={{ mb: 3 }}
           />
 
-          <Box display="flex" justifyContent="space-between">
-            <Button type="submit" variant="contained">Login</Button>
-            <Button onClick={() => navigate('/register')} color="secondary">Register</Button>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            <Button type="submit" variant="contained" disabled={loading}>
+              {loading ? <CircularProgress size={24} /> : "Login"}
+            </Button>
+            <Button onClick={() => navigate('/register')} color="secondary">
+              Register
+            </Button>
           </Box>
         </form>
       </Paper>
