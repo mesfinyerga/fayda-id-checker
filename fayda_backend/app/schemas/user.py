@@ -16,6 +16,7 @@ class UserBase(BaseModel):
     phone: Optional[str] = Field(default=None, example="+251912345678")
     company: Optional[str] = Field(default=None, example="Acme Inc")
     notes: Optional[str] = Field(default=None, example="Internal note or comment")
+    organization_id: Optional[int] = None
 
 class UserCreate(UserBase):
     """

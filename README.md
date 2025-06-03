@@ -44,3 +44,38 @@ uvicorn main:app --reload #uvicorn app.main:app --reload
 cd ../frontend
 npm install
 npm run dev
+
+
+## 📬 Sample User Registration Payloads
+
+To test different roles, send a `POST` request to `/register` with JSON like the examples below.
+
+### Admin Registration
+```json
+{
+  "email": "admin@example.com",
+  "full_name": "Admin User",
+  "password": "StrongPass123",
+  "role": "admin"
+}
+```
+
+### Regular User Registration
+```json
+{
+  "email": "user@example.com",
+  "full_name": "Regular User",
+  "password": "StrongPass123",
+  "role": "user"
+}
+```
+
+### Owner Registration
+```json
+{
+  "email": "owner@example.com",
+  "full_name": "Owner User",
+  "password": "StrongPass123",
+  "role": "owner"
+}
+```
