@@ -8,7 +8,7 @@ import { useAuth } from "../context/AuthContext";
 import PaymentHistory from "../components/PaymentHistory";
 
 export default function UserProfile() {
-  const { fetchProfile, updateProfile, uploadAvatar } = useAuth();
+  const { fetchProfile, updateProfile, uploadAvatar, token } = useAuth();
   const [profile, setProfile] = useState(null);           // Fetched backend profile
   const [editData, setEditData] = useState({});
   const [editMode, setEditMode] = useState(false);
@@ -275,7 +275,7 @@ export default function UserProfile() {
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           Payment & Subscription History
         </Typography>
-        <PaymentHistory />
+        <PaymentHistory token={token} />
       </Paper>
     </Container>
   );
