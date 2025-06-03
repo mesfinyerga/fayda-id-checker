@@ -1,15 +1,31 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { AppBar, Toolbar, Typography, Button, Box, Avatar, IconButton, Tooltip, Menu, MenuItem } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
-  const { token, role, logout } = useAuth();
+  const { token, role, logout, fetchProfile } = useAuth();
   const navigate = useNavigate();
+
+  // --- Avatar dropdown for user profile ---
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    if (token) {
+      fetchProfile().then(setProfile);
+    } else {
+      setProfile(null);
+    }
+  }, [token, fetchProfile]);
+
+  const handleMenuOpen = (e) => setAnchorEl(e.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
 
   const handleLogout = () => {
     logout();
     navigate('/');
+    handleMenuClose();
   };
 
   return (
@@ -30,14 +46,9 @@ const Navbar = () => {
           </Button>
 
           {token && role === 'admin' && (
-            <>
-              <Button component={Link} to="/dashboard" sx={{ color: 'white' }}>
-                Dashboard
-              </Button>
-              <Button component={Link} to="/dashboard" sx={{ color: 'white' }}>
-                Admin
-              </Button>
-            </>
+            <Button component={Link} to="/dashboard" sx={{ color: 'white' }}>
+              Admin Dashboard
+            </Button>
           )}
 
           {token && (role === 'client' || role === 'user') && (
@@ -46,10 +57,43 @@ const Navbar = () => {
             </Button>
           )}
 
-          {token ? (
-            <Button onClick={handleLogout} sx={{ color: 'hotpink' }}>
-              Logout
+          {token && (
+            <Button component={Link} to="/payment" sx={{ color: 'white' }}>
+              Simulate Payment
             </Button>
+          )}
+
+          {token ? (
+            <>
+              {/* Profile Avatar + Menu */}
+              <Tooltip title="Profile">
+                <IconButton onClick={handleMenuOpen} sx={{ p: 0, ml: 2 }}>
+                  <Avatar
+                    src={profile?.avatar_url}
+                    sx={{ width: 36, height: 36, bgcolor: '#90caf9' }}
+                  >
+                    {/* Fallback: first letter of name, else generic */}
+                    {profile?.full_name
+                      ? profile.full_name[0].toUpperCase()
+                      : <span role="img" aria-label="user">👤</span>
+                    }
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+              <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+                <MenuItem
+                  onClick={() => {
+                    navigate('/profile');
+                    handleMenuClose();
+                  }}
+                >
+                  Profile
+                </MenuItem>
+                <MenuItem onClick={handleLogout} sx={{ color: '#d32f2f' }}>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </>
           ) : (
             <>
               <Button component={Link} to="/login" sx={{ color: 'white' }}>
