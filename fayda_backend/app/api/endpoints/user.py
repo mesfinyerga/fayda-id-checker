@@ -1,20 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from app.models.user import User
-from app.schemas.user import UserBase, UserUpdate, UserPasswordUpdate
-from app.core.security import get_password_hash, verify_password
+from app.schemas.user import UserBase, UserUpdate, UserPasswordUpdate, UserOut
+from app.core.security import (
+    get_password_hash,
+    verify_password,
+    get_current_user,
+)
 from app.db.session import get_db
-from app.core.auth import get_current_user
 from app.models.payment import Payment  # Import Payment model!
+from app.schemas.payment import PaymentOut
 import shutil, os
 
 router = APIRouter()
 
-@router.get("/me", response_model=UserBase)
+@router.get("/me", response_model=UserOut)
 def get_profile(current_user: User = Depends(get_current_user)):
     return current_user
 
-@router.put("/users/me", response_model=UserBase)
+@router.put("/users/me", response_model=UserOut)
 def update_profile(update: UserUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     for attr, value in update.dict(exclude_unset=True).items():
         setattr(current_user, attr, value)
@@ -48,7 +52,6 @@ def upload_avatar(file: UploadFile = File(...), db: Session = Depends(get_db), c
     db.refresh(current_user)
     return {"avatar_url": current_user.avatar_url}
 
-@router.get("/me/payments")
+@router.get("/me/payments", response_model=list[PaymentOut])
 def get_payments(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    payments = db.query(Payment).filter(Payment.user_id == current_user.id).all()
-    return [p.to_dict() for p in payments]
+    return db.query(Payment).filter(Payment.user_id == current_user.id).order_by(Payment.created_at.desc()).all()

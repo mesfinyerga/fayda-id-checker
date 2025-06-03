@@ -2,14 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, Form
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.user import User
-from app.core.security import verify_password
+from app.core.security import verify_password, SECRET_KEY, ALGORITHM
 from jose import jwt
 from datetime import datetime, timedelta
 
 router = APIRouter()
 
-SECRET_KEY = "your-secret-key"  # Replace with a secure env variable
-ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 @router.post("/login")
