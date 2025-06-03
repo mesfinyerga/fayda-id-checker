@@ -12,6 +12,7 @@ def create_user(db: Session, user_in: UserCreate):
         status=user_in.status,
         role=user_in.role or "user",
         notes=user_in.notes,
+        organization_id=user_in.organization_id,
     )
     db.add(user)
     db.commit()
