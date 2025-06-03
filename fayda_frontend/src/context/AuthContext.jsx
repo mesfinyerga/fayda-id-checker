@@ -60,18 +60,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Fetch logged-in user's profile
-  const fetchProfile = async () => {
-  if (!token) return null;
-  try {
-    const res = await axios.get(`${API}/me`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return res.data;
-  } catch (err) {
-    console.error('Failed to fetch profile:', err);
-    return null;
-  }
-  };
+  const fetchProfile = useCallback(async () => {
+    if (!token) return null;
+    try {
+      const res = await axios.get(`${API}/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return res.data;
+    } catch (err) {
+      console.error('Failed to fetch profile:', err);
+      return null;
+    }
+  }, [token]);
 
   // Update profile (PUT /users/me)
   const updateProfile = async (profileData) => {
