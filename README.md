@@ -34,11 +34,12 @@ git clone https://github.com/mesfinyerga/fayda-id-checker.git
 cd fayda-id-checker
 
 # Backend Setup
-cd backend
+cd fayda_backend
 python -m venv venv
 source venv/bin/activate  # or venv\Scripts\activate on Windows
 pip install -r requirements.txt
-uvicorn main:app --reload #uvicorn app.main:app --reload 
+python -m app.db.init_db  # create the SQLite database tables
+uvicorn main:app --reload #uvicorn app.main:app --reload
 
 # Frontend Setup
 cd ../frontend
