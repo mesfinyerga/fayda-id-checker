@@ -11,6 +11,9 @@ from app.db.session import get_db
 from app.models.payment import Payment  # Import Payment model!
 import shutil, os
 
+# Determine the base directory two levels up (../..)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 router = APIRouter()
 
 @router.get("/me", response_model=UserBase)
@@ -41,12 +44,15 @@ def allowed_file(filename):
 def upload_avatar(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     if not allowed_file(file.filename):
         raise HTTPException(status_code=400, detail="Invalid file type.")
-    upload_dir = "static/avatars"
+    # Use a consistent path under the backend directory
+    upload_dir = os.path.join(BASE_DIR, "static", "avatars")
     os.makedirs(upload_dir, exist_ok=True)
     file_path = os.path.join(upload_dir, f"{current_user.id}_{file.filename}")
     with open(file_path, "wb") as f:
         shutil.copyfileobj(file.file, f)
-    current_user.avatar_url = "/" + file_path.replace("\\", "/")
+    # Store the URL relative to the backend base directory so it matches the mounted static path
+    relative = os.path.relpath(file_path, BASE_DIR)
+    current_user.avatar_url = "/" + relative.replace("\\", "/")
     db.commit()
     db.refresh(current_user)
     return {"avatar_url": current_user.avatar_url}
