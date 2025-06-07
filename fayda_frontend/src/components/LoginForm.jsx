@@ -4,7 +4,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../utils/api';
 
 // Helper: Parse JWT and extract payload
 function parseJwt(token) {
@@ -36,7 +36,7 @@ const LoginForm = () => {
       formData.append('username', email);
       formData.append('password', password);
 
-      const res = await axios.post('http://localhost:8000/auth/login', formData, {
+      const res = await api.post('/auth/login', formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
 

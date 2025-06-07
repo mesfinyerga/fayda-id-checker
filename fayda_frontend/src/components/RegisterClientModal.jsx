@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import api from '../utils/api';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions,
   TextField, MenuItem, Button, Grid
@@ -32,19 +33,14 @@ const RegisterClientModal = ({ open, onClose, refreshUsers }) => {
     });
 
     try {
-      const res = await fetch("http://localhost:8000/register/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+      const res = await api.post("/register/", payload);
 
-      if (res.ok) {
+      if (res.status === 200 || res.status === 201) {
         alert("✅ Client registered successfully");
         onClose();
         if (refreshUsers) refreshUsers();
       } else {
-        const error = await res.json();
-        alert("❌ Error: " + (error.detail || "Registration failed"));
+        alert("❌ Registration failed");
       }
     } catch (err) {
       alert("❌ Network error: " + err.message);

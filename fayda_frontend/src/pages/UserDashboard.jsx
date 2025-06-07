@@ -69,7 +69,7 @@ const UserDashboard = () => {
       </Paper>
 
       {/* Payment History Section */}
-      <PaymentHistory token={token} />
+      <PaymentHistory />
     </Container>
   );
 };
