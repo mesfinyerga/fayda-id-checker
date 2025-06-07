@@ -22,10 +22,16 @@ def startup_event():
     os.makedirs(os.path.join(BASE_DIR, "static"), exist_ok=True)
 
 # --- CORS setup ---
+# Read allowed origins from environment variable, or use sensible defaults
+allowed_origins = os.getenv(
+    "ALLOWED_ORIGINS",
+    "https://fayda-id-checker.vercel.app,http://localhost:5173"
+)
+allowed_origins = [origin.strip() for origin in allowed_origins.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    "https://fayda-id-checker.vercel.app", 
-    allow_origins=["http://localhost:5173"],  # <-- Your React dev server
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
