@@ -24,6 +24,7 @@ def startup_event():
 # --- CORS setup ---
 app.add_middleware(
     CORSMiddleware,
+    "https://fayda-id-checker.vercel.app", 
     allow_origins=["http://localhost:5173"],  # <-- Your React dev server
     allow_credentials=True,
     allow_methods=["*"],
