@@ -3,7 +3,9 @@ __pycache__/
 *.py[cod]
 *.sqlite3
 .env
-
+*.pyc
+*.pyo
+*.pyd
 # Node
 node_modules/
 build/
