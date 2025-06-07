@@ -275,7 +275,7 @@ export default function UserProfile() {
         <Typography variant="h5" fontWeight="bold" gutterBottom>
           Payment & Subscription History
         </Typography>
-        <PaymentHistory token={token} />
+        <PaymentHistory />
       </Paper>
     </Container>
   );

@@ -16,11 +16,10 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
+import api from '../utils/api';
+
 
 const IDCheckForm = () => {
-  const { token } = useAuth();
   const [idNumber, setIdNumber] = useState('');
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
@@ -34,14 +33,8 @@ const IDCheckForm = () => {
     setLoading(true);
 
     try {
-      console.log("🔑 Token sent to backend:", token);
-      const res = await axios.get(
-        `http://localhost:8000/id/mock-id-check/${idNumber}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const res = await api.get(
+        `/id/mock-id-check/${idNumber}`
       );
       setResult(res.data);
     } catch (err) {

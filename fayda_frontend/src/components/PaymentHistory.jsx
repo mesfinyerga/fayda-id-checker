@@ -21,8 +21,10 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
+import api from "../utils/api";
+import { useAuth } from "../context/AuthContext";
 
-const PAYMENT_ENDPOINT = "http://localhost:8000/payments/";
+const PAYMENT_ENDPOINT = "/payments/";
 
 const statusColors = {
   success: "#388e3c",
@@ -30,7 +32,8 @@ const statusColors = {
   pending: "#fbc02d",
 };
 
-export default function PaymentHistory({ token }) {
+export default function PaymentHistory() {
+  const { token } = useAuth();
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [methodFilter, setMethodFilter] = useState("");
@@ -40,11 +43,9 @@ export default function PaymentHistory({ token }) {
   useEffect(() => {
     if (!token) return;
     setLoading(true);
-    fetch(PAYMENT_ENDPOINT, {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.ok ? res.json() : [])
-      .then(data => setHistory(data))
+    api
+      .get(PAYMENT_ENDPOINT)
+      .then((res) => setHistory(res.data))
       .catch(() => setHistory([]))
       .finally(() => setLoading(false));
   }, [token]);

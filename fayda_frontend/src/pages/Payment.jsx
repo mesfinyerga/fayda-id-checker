@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../utils/api";
 import { Container, Paper, Typography, TextField, Select, MenuItem, Button, Box, CircularProgress, Alert } from "@mui/material";
-import { useAuth } from "../context/AuthContext";
 
-const PAYMENT_ENDPOINT = "http://localhost:8000/payments/";
+const PAYMENT_ENDPOINT = "/payments/";
 
 export default function Payment() {
-  const { token } = useAuth();
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState("Telebirr");
   const [loading, setLoading] = useState(false);
@@ -19,10 +17,10 @@ export default function Payment() {
     setError("");
     setResult(null);
     try {
-      const response = await axios.post(
+      const response = await api.post(
         PAYMENT_ENDPOINT,
         { amount: parseFloat(amount), method },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {}
       );
       setResult(response.data);
     } catch (err) {
