@@ -20,10 +20,12 @@ const PageHeader = ({
       sx={{
         py: isMobile ? 3 : 4,
         px: isMobile ? 2 : 3,
-        backgroundColor: 'background.paper',
-        borderBottom: '1px solid',
-        borderColor: 'neutral.200',
-        mb: 3,
+        backgroundColor: 'var(--color-surface)',
+        borderBottom: '1px solid var(--color-border)',
+        mb: 4,
+        borderRadius: '0 0 20px 20px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+        animation: 'fadeInScale 0.5s ease-out',
         ...sx
       }}
       {...props}
@@ -54,9 +56,13 @@ const PageHeader = ({
               component="h1"
               gutterBottom={!!subtitle}
               sx={{
-                fontWeight: 600,
-                color: 'text.primary',
-                lineHeight: 1.2
+                fontWeight: 800,
+                background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                lineHeight: 1.2,
+                mb: subtitle ? 1 : 0
               }}
             >
               {title}
@@ -66,10 +72,11 @@ const PageHeader = ({
           {subtitle && (
             <Typography
               variant="body1"
-              color="text.secondary"
               sx={{
+                color: 'var(--color-text-muted)',
                 maxWidth: '600px',
-                lineHeight: 1.5
+                lineHeight: 1.6,
+                fontSize: '1.05rem'
               }}
             >
               {subtitle}

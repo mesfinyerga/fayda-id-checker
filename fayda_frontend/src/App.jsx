@@ -32,7 +32,7 @@ function App() {
       <Router>
         <div id="app">
           <Navbar />
-          <main id="main-content">
+          <main id="main-content" style={{ minHeight: '100vh', backgroundColor: 'var(--color-bg)' }}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<LoginForm />} />

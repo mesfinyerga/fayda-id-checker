@@ -20,7 +20,8 @@ const Layout = ({
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: 'background.default',
+        backgroundColor: 'var(--color-bg)',
+        animation: 'fadeIn 0.4s ease-out',
         ...sx
       }}
       {...props}
@@ -33,11 +34,13 @@ const Layout = ({
           flex: 1,
           display: 'flex',
           flexDirection: 'column',
-          py: isMobile ? 2 : 3,
-          px: isMobile ? 2 : 3,
+          py: isMobile ? 3 : 4,
+          px: isMobile ? 2 : 4,
         }}
       >
-        {children}
+        <Box sx={{ animation: 'slideInUp 0.5s ease-out', width: '100%' }}>
+          {children}
+        </Box>
       </Container>
     </Box>
   );

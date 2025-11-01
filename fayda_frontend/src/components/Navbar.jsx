@@ -105,25 +105,32 @@ export default function Navbar() {
           startIcon={item.icon}
           sx={{
             color: 'var(--color-text-inverse)',
-            fontWeight: 'bold',
+            fontWeight: 600,
             textTransform: 'none',
             fontSize: '1rem',
             px: 3,
             py: 2,
-            borderRadius: 0,
+            borderRadius: '8px',
             position: 'relative',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             '&:hover': {
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              transform: 'translateY(-2px)'
             },
             ...(isActiveRoute(item.href) && {
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(10px)',
               '&::after': {
                 content: '""',
                 position: 'absolute',
-                bottom: 0,
-                left: 0,
-                right: 0,
+                bottom: 4,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '60%',
                 height: '3px',
-                backgroundColor: 'var(--color-primary)',
+                background: 'linear-gradient(90deg, #14b8a6, #ffffff)',
+                borderRadius: '2px',
+                boxShadow: '0 2px 4px rgba(20, 184, 166, 0.4)'
               }
             })
           }}
@@ -172,10 +179,24 @@ export default function Navbar() {
         position="static"
         elevation={0}
         sx={{
-          backgroundColor: 'var(--color-primary)',
-          borderTop: '3px solid var(--color-secondary)',
+          background: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.06)',
           '& .MuiToolbar-root': {
-            minHeight: 64
+            minHeight: 70
+          },
+          position: 'relative',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            background: 'linear-gradient(90deg, #14b8a6 0%, #3b82f6 50%, #14b8a6 100%)',
+            backgroundSize: '200% 100%',
+            animation: 'shimmer 3s linear infinite'
           }
         }}
       >
@@ -187,11 +208,19 @@ export default function Navbar() {
             to="/"
             sx={{
               color: 'var(--color-text-inverse)',
-              fontWeight: 'bold',
+              fontWeight: 700,
               ml: 2,
               textDecoration: 'none',
+              fontSize: '1.25rem',
+              letterSpacing: '-0.02em',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(224, 242, 254, 1) 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              transition: 'all 0.3s ease',
               '&:hover': {
-                color: 'var(--color-text-inverse)',
+                transform: 'scale(1.05)',
+                filter: 'brightness(1.1)'
               }
             }}
           >

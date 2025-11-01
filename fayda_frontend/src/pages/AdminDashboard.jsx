@@ -153,35 +153,69 @@ const AdminDashboard = () => {
         elevation={0} 
         sx={{ 
           p: 4, 
-          mb: 4, 
+          mb: 4,
           background: `
-            linear-gradient(135deg, #3d5c6f 0%, #4a6b7f 50%, #3d5c6f 100%),
-            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+            linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #14b8a6 100%),
+            radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(20, 184, 166, 0.2) 0%, transparent 50%),
+            url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill-opacity='0.05'%3E%3Cpolygon fill='%23ffffff' points='50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40'/%3E%3C/g%3E%3C/svg%3E")
           `,
-          borderRadius: 3,
+          borderRadius: '20px',
           color: semanticColors.textInverse,
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+          animation: 'fadeInScale 0.6s ease-out',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%)',
+            animation: 'pulse 4s ease-in-out infinite'
+          }
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 1 }}>
           <Box>
-            <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: semanticColors.textInverse }}>
+            <Typography 
+              variant="h4" 
+              fontWeight="800" 
+              gutterBottom 
+              sx={{ 
+                color: semanticColors.textInverse,
+                fontSize: { xs: '1.75rem', md: '2rem' },
+                mb: 2
+              }}
+            >
               System Overview
             </Typography>
-            <Typography sx={{ color: 'rgba(255, 255, 255, 0.9)', variant: 'body1' }}>
-              Total Users: {users.length} • Active: {users.filter(u => u.status === 'paid').length}
+            <Typography sx={{ color: 'rgba(255, 255, 255, 0.95)', variant: 'body1', fontSize: '1.1rem' }}>
+              Total Users: <strong>{users.length}</strong> • Active: <strong>{users.filter(u => u.status === 'paid').length}</strong>
             </Typography>
           </Box>
           <Button
             variant="contained"
             onClick={() => setModalOpen(true)}
             sx={{
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              background: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(10px)',
               color: semanticColors.textInverse,
-              border: '1px solid rgba(255, 255, 255, 0.3)',
+              border: '2px solid rgba(255, 255, 255, 0.3)',
+              borderRadius: '12px',
+              px: 3,
+              py: 1.5,
+              fontWeight: 600,
+              textTransform: 'none',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              transition: 'all 0.3s ease',
               '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.3)'
+                background: 'rgba(255, 255, 255, 0.3)',
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 16px rgba(0, 0, 0, 0.2)'
               }
             }}
           >
@@ -196,6 +230,9 @@ const AdminDashboard = () => {
         ...layout.form.section,
         bgcolor: semanticColors.surface,
         border: `1px solid ${semanticColors.border}`,
+        borderRadius: '20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+        animation: 'fadeInScale 0.7s ease-out'
       }}>
         <Typography variant="h6" gutterBottom sx={{ color: semanticColors.text }}>
           Filters & Search
@@ -299,6 +336,9 @@ const AdminDashboard = () => {
         overflow: 'hidden',
         bgcolor: semanticColors.surface,
         border: `1px solid ${semanticColors.border}`,
+        borderRadius: '20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+        animation: 'fadeInScale 0.8s ease-out'
       }}>
         <TableContainer>
           <Table>

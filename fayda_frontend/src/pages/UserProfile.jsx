@@ -28,6 +28,8 @@ import {
 } from "@mui/icons-material";
 import { useAuth } from "../context/AuthContext";
 import PaymentHistory from "../components/PaymentHistory";
+import Layout from "../components/layout/Layout";
+import PageHeader from "../components/layout/PageHeader";
 
 export default function UserProfile() {
   const { fetchProfile, updateProfile, uploadAvatar, token } = useAuth();
@@ -155,21 +157,43 @@ export default function UserProfile() {
   };
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh',
-      background: 'var(--color-bg)',
-      py: 4
-    }}>
+    <Layout>
+      <PageHeader
+        title="User Profile"
+        subtitle="Manage your account settings and personal information"
+        breadcrumbs={[
+          { label: 'Home', href: '/' },
+          { label: 'Profile', href: '/profile' }
+        ]}
+      />
+      <Box sx={{ 
+        animation: 'fadeIn 0.4s ease-out'
+      }}>
       <Container maxWidth="lg">
         {/* Header Section with Ethiopian Flag Colors */}
         <Box sx={{ 
-          background: `linear-gradient(90deg, #009639 0%, #FEDD00 50%, #DA121A 100%)`,
-          borderRadius: 3,
+          background: `
+            linear-gradient(135deg, #009639 0%, #FEDD00 33%, #DA121A 66%, #009639 100%),
+            radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%)
+          `,
+          borderRadius: '20px',
           p: 4,
           mb: 4,
           color: 'var(--color-text-inverse)',
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+          animation: 'fadeInScale 0.6s ease-out',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'url("data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill-opacity=\'0.05\'%3E%3Cpolygon fill=\'%23ffffff\' points=\'50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40\'/%3E%3C/g%3E%3C/svg%3E")',
+            opacity: 0.3
+          }
         }}>
           <Box sx={{
             position: 'absolute',
@@ -311,7 +335,13 @@ export default function UserProfile() {
         {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
         {/* Main Content Tabs */}
-        <Card sx={{ borderRadius: 3, overflow: 'hidden', boxShadow: 'var(--shadow-lg)' }}>
+        <Card sx={{ 
+          borderRadius: '20px', 
+          overflow: 'hidden', 
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+          border: '1px solid var(--color-border)',
+          animation: 'fadeInScale 0.7s ease-out'
+        }}>
           <Tabs
             value={activeTab}
             onChange={(e, newValue) => setActiveTab(newValue)}
@@ -600,6 +630,7 @@ export default function UserProfile() {
           </Box>
         </Card>
       </Container>
-    </Box>
+      </Box>
+    </Layout>
   );
 }

@@ -37,15 +37,29 @@ const UserDashboard = () => {
         elevation={0} 
         sx={{ 
           p: 4, 
-          mb: 4, 
+          mb: 4,
           background: `
-            linear-gradient(135deg, #3d5c6f 0%, #4a6b7f 50%, #3d5c6f 100%),
-            url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+            linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #14b8a6 100%),
+            radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(20, 184, 166, 0.2) 0%, transparent 50%),
+            url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill-opacity='0.05'%3E%3Cpolygon fill='%23ffffff' points='50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40'/%3E%3C/g%3E%3C/svg%3E")
           `,
-          borderRadius: 3,
+          borderRadius: '20px',
           color: semanticColors.textInverse,
           position: 'relative',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+          animation: 'fadeInScale 0.6s ease-out',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 70%)',
+            animation: 'pulse 4s ease-in-out infinite'
+          }
         }}
       >
         
@@ -54,21 +68,31 @@ const UserDashboard = () => {
             <Avatar 
               sx={{ 
                 bgcolor: 'rgba(255, 255, 255, 0.2)', 
-                width: 80, 
-                height: 80,
-                fontSize: '2rem',
-                border: '3px solid rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(10px)'
+                width: { xs: 70, md: 90 }, 
+                height: { xs: 70, md: 90 },
+                fontSize: { xs: '1.75rem', md: '2.5rem' },
+                border: '3px solid rgba(255, 255, 255, 0.4)',
+                backdropFilter: 'blur(10px)',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.2)'
               }}
             >
               👤
             </Avatar>
           </Grid>
           <Grid item xs>
-            <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: semanticColors.textInverse }}>
+            <Typography 
+              variant="h4" 
+              fontWeight="800" 
+              gutterBottom 
+              sx={{ 
+                color: semanticColors.textInverse,
+                fontSize: { xs: '1.75rem', md: '2rem' },
+                mb: 1
+              }}
+            >
               Welcome back!
             </Typography>
-            <Typography sx={{ color: 'rgba(255, 255, 255, 0.9)', variant: 'body1' }}>
+            <Typography sx={{ color: 'rgba(255, 255, 255, 0.95)', variant: 'body1', fontSize: '1.1rem' }}>
               You are logged in as <strong>{role}</strong> • Ready to verify IDs
             </Typography>
           </Grid>
@@ -82,8 +106,14 @@ const UserDashboard = () => {
             height: '100%',
             bgcolor: semanticColors.surface,
             border: `1px solid ${semanticColors.border}`,
+            borderRadius: '20px',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+            animation: 'fadeInScale 0.7s ease-out',
             '&:hover': {
-              boxShadow: 'var(--shadow-md)',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+              transform: 'translateY(-4px)',
+              borderColor: semanticColors.primary
             }
           }}>
             <CardContent sx={{ p: 3 }}>
@@ -152,8 +182,14 @@ const UserDashboard = () => {
             height: '100%',
             bgcolor: semanticColors.surface,
             border: `1px solid ${semanticColors.border}`,
+            borderRadius: '20px',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+            animation: 'fadeInScale 0.7s ease-out',
             '&:hover': {
-              boxShadow: 'var(--shadow-md)',
+              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.12)',
+              transform: 'translateY(-4px)',
+              borderColor: semanticColors.success
             }
           }}>
             <CardContent sx={{ p: 3 }}>
@@ -237,9 +273,11 @@ const UserDashboard = () => {
       <Paper elevation={0} sx={{ 
         p: 4, 
         mb: 4, 
-        borderRadius: 3,
+        borderRadius: '20px',
         bgcolor: semanticColors.surface,
         border: `1px solid ${semanticColors.border}`,
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+        animation: 'fadeInScale 0.8s ease-out'
       }}>
         <Box sx={{ mb: 3 }}>
           <Typography variant="h5" gutterBottom sx={{ 
@@ -261,9 +299,12 @@ const UserDashboard = () => {
 
       {/* Payment History Section */}
       <Paper elevation={0} sx={{ 
-        borderRadius: 3,
+        borderRadius: '20px',
         bgcolor: semanticColors.surface,
         border: `1px solid ${semanticColors.border}`,
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.05)',
+        animation: 'fadeInScale 0.9s ease-out',
+        overflow: 'hidden'
       }}>
         <Box sx={{ 
           p: 3, 
