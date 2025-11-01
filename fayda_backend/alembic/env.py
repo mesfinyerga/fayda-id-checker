@@ -7,13 +7,17 @@ from alembic import context
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.db.base_class import Base  # import correct Base!
-from app.models.user import User
-# from app.models.payment import Payment  # if you have it
+from app.db.base import *  # Import all models
+from app.core.config import settings
 
 config = context.config
 
+# Override sqlalchemy.url with DATABASE_URL from environment
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
+# Set the database URL from environment
+config.set_main_option("sqlalchemy.url", os.getenv("DATABASE_URL", settings.database_url))
 
 target_metadata = Base.metadata
 

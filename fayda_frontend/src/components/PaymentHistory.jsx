@@ -8,7 +8,6 @@ import {
   TableCell,
   TableBody,
   Paper,
-  CircularProgress,
   Toolbar,
   Button,
   MenuItem,
@@ -23,6 +22,9 @@ import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import api from "../utils/api";
 import { useAuth } from "../context/AuthContext";
+import { layout } from "../utils/spacing";
+import { TableSkeleton, LoadingWithRetry } from "./LoadingStates";
+import { useErrorHandler } from "./ErrorBoundary";
 
 const PAYMENT_ENDPOINT = "/payments/";
 
@@ -39,16 +41,21 @@ export default function PaymentHistory() {
   const [methodFilter, setMethodFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
+  const { error, handleError, clearError } = useErrorHandler();
 
   useEffect(() => {
     if (!token) return;
     setLoading(true);
+    clearError();
     api
       .get(PAYMENT_ENDPOINT)
       .then((res) => setHistory(res.data))
-      .catch(() => setHistory([]))
+      .catch((err) => {
+        setHistory([]);
+        handleError(err);
+      })
       .finally(() => setLoading(false));
-  }, [token]);
+  }, [token, handleError, clearError]);
 
   const filteredHistory = history.filter((row) => {
     let matches = true;
@@ -91,13 +98,13 @@ export default function PaymentHistory() {
   };
 
   return (
-    <Paper elevation={2} sx={{ p: 3, mt: 4 }}>
+    <Paper elevation={2} sx={{ ...layout.card.standard, ...layout.section.standard }}>
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={2}
         alignItems="center"
         justifyContent="space-between"
-        mb={2}
+        sx={{ ...layout.form.group }}
       >
         <Typography variant="h6">💳 Payment History</Typography>
         <Stack direction="row" spacing={1}>
@@ -166,15 +173,29 @@ export default function PaymentHistory() {
           </Button>
         )}
       </Toolbar>
-      {loading ? (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-          <CircularProgress />
-        </Box>
-      ) : filteredHistory.length === 0 ? (
-        <Typography color="text.secondary">
-          No payment records found for selected filters.
-        </Typography>
-      ) : (
+      <LoadingWithRetry
+        loading={loading}
+        error={error}
+        onRetry={() => {
+          clearError();
+          setLoading(true);
+          api
+            .get(PAYMENT_ENDPOINT)
+            .then((res) => setHistory(res.data))
+            .catch((err) => {
+              setHistory([]);
+              handleError(err);
+            })
+            .finally(() => setLoading(false));
+        }}
+        loadingMessage="Loading payment history..."
+        errorMessage="Failed to load payment history"
+      >
+        {filteredHistory.length === 0 ? (
+          <Typography color="text.secondary">
+            No payment records found for selected filters.
+          </Typography>
+        ) : (
         <Table>
           <TableHead>
             <TableRow>
@@ -204,9 +225,10 @@ export default function PaymentHistory() {
                 <TableCell>{p.reference}</TableCell>
               </TableRow>
             ))}
-          </TableBody>
-        </Table>
-      )}
+                      </TableBody>
+          </Table>
+        )}
+      </LoadingWithRetry>
     </Paper>
   );
 }
