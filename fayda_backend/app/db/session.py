@@ -1,11 +1,23 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
+from app.core.config import settings
+import os
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./fapp.db"
+# Use DATABASE_URL from environment or fallback to SQLite
+DATABASE_URL = os.getenv("DATABASE_URL", settings.database_url)
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+# Configure engine based on database type
+if DATABASE_URL.startswith("postgresql"):
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+        pool_recycle=300,
+    )
+else:
+    # SQLite fallback
+    engine = create_engine(
+        DATABASE_URL, connect_args={"check_same_thread": False}
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -15,6 +27,12 @@ def get_db():
         yield db
     finally:
         db.close()
+
+def set_tenant_context(db, tenant_id: str):
+    """Set the current tenant context for RLS policies"""
+    if DATABASE_URL.startswith("postgresql"):
+        db.execute(text("SET LOCAL app.current_tenant = :tid"), {"tid": tenant_id})
+        db.commit()
 
 # Run as a Module from the Project Root
 # From your project root (C:\Users\lijma\Documents\GitHub\fayda-id-checker\fayda_backend), run:

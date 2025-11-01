@@ -8,7 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('token') || null);
   const [role, setRole] = useState(() => localStorage.getItem('role') || null);
   const [user, setUser] = useState(null);
-
+  const [tenant, setTenant] = useState(null); // New: tenant information
 
   // Restore session (token/role) on mount
   useEffect(() => {
@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setRole(null);
     setUser(null);
+    setTenant(null);
     localStorage.removeItem('token');
     localStorage.removeItem('role');
   };
@@ -53,7 +54,15 @@ export const AuthProvider = ({ children }) => {
     if (!token) return null;
     try {
       const res = await api.get(`/me`);
-      return res.data;
+      const userData = res.data;
+      setUser(userData);
+      
+      // Extract tenant information if available
+      if (userData.tenant) {
+        setTenant(userData.tenant);
+      }
+      
+      return userData;
     } catch (err) {
       console.error('Failed to fetch profile:', err);
       return null;
@@ -150,7 +159,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
-        token, role, user,
+        token, role, user, tenant, // Added tenant
         login, logout, register,
         fetchProfile, updateProfile, uploadAvatar, changePassword,
         fetchPayments,

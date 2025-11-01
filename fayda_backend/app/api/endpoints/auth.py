@@ -2,13 +2,12 @@ from fastapi import APIRouter, Depends, HTTPException, Form
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.user import User
-from app.core.security import verify_password, SECRET_KEY, ALGORITHM
+from app.core.security import verify_password
+from app.core.config import settings
 from jose import jwt
 from datetime import datetime, timedelta
 
 router = APIRouter()
-
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 @router.post("/login")
 def login(
@@ -23,8 +22,8 @@ def login(
     to_encode = {
         "sub": user.email,
         "role": user.role,  # 👈 This is critical
-        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        "exp": datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
     }
 
-    access_token = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    access_token = jwt.encode(to_encode, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
     return {"access_token": access_token, "token_type": "bearer"}
