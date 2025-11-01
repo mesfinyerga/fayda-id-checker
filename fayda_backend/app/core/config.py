@@ -5,6 +5,9 @@ class Settings(BaseSettings):
     app_name: str = "Fayda ID Checker"
     
     # Database
+    # Set DATABASE_URL environment variable to use PostgreSQL 18 (recommended)
+    # Format: postgresql+psycopg://user:password@localhost:5432/database_name
+    # Falls back to SQLite if DATABASE_URL is not set
     database_url: str = "sqlite:///./fapp.db"
     
     # JWT Settings

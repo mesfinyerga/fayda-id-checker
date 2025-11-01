@@ -4,14 +4,16 @@ from app.core.config import settings
 import os
 
 # Use DATABASE_URL from environment or fallback to SQLite
+# For PostgreSQL 18: postgresql+psycopg://user:password@host:port/database
 DATABASE_URL = os.getenv("DATABASE_URL", settings.database_url)
 
 # Configure engine based on database type
 if DATABASE_URL.startswith("postgresql"):
+    # PostgreSQL connection with connection pooling optimized for PostgreSQL 18
     engine = create_engine(
         DATABASE_URL,
-        pool_pre_ping=True,
-        pool_recycle=300,
+        pool_pre_ping=True,  # Verify connections before using
+        pool_recycle=300,    # Recycle connections after 5 minutes
     )
 else:
     # SQLite fallback
