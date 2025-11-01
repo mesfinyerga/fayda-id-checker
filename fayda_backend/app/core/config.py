@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     # App Environment
     app_env: str = "dev"
     
+    # PII Encryption
+    # Set PII_ENCRYPTION_KEY in environment for PII encryption
+    # Generate with: python -c "from app.core.pii_encryption import generate_encryption_key; print(generate_encryption_key())"
+    pii_encryption_key: Optional[str] = None
+    
     # Legacy compatibility
     @property
     def secret_key(self) -> str:

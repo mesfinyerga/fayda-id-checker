@@ -19,6 +19,8 @@ sys.path.insert(0, str(project_root))
 from sqlalchemy.orm import Session
 from app.core.config import settings
 from app.db.session import SessionLocal
+# Import all models to ensure relationships are registered
+from app.db.base import *  # This imports all models (User, Payment, Tenant, Verification, etc.)
 from app.models.tenant import Tenant
 from app.models.user import User
 from app.models.payment import Payment

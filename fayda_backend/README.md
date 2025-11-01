@@ -125,6 +125,8 @@ After running the seed script:
 - **Admin**: `admin@fayda.com` / `admin123`
 - **User**: `user@fayda.com` / `user123`
 
+**For detailed admin creation guide, see:** [HOW_TO_CREATE_ADMIN_USER.md](./HOW_TO_CREATE_ADMIN_USER.md)
+
 ### Testing
 
 ```bash
