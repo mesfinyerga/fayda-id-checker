@@ -1,6 +1,6 @@
-# PostgreSQL 17 Setup Guide
+# PostgreSQL 18 Setup Guide
 
-This guide is specifically for your PostgreSQL 17 + pgAdmin 4 setup with database "faydaidcheck".
+This guide is specifically for your PostgreSQL 18 + pgAdmin 4 setup with database "faydaidcheck".
 
 ## 1. Database Connection Details
 
